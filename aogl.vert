@@ -1,4 +1,4 @@
-#version 410 core
+#version 430 core
 
 #define POSITION	0
 #define NORMAL		1
@@ -33,12 +33,12 @@ out block
 } Out;
 
 void main()
-{	
+{
 	Out.Texcoord = Texcoord;
 	vec3 p = Position;
 	vec3 n = Normal;
 	float t = Time + gl_InstanceID;
-	//t = 0;
+	t = 0;
 	float ct = cos(t);
 	float st = sin(t);
 	p.x = Position.x * ct + Position.z * st;
@@ -53,11 +53,11 @@ void main()
 	if (gl_InstanceID > 0) {
 		p.x +=  square_delta * floor(gl_InstanceID / square) - square;
 		p.z +=  square_delta * (gl_InstanceID - (square * floor(gl_InstanceID/square))) - square;
-		p.y +=  sin(floor(gl_InstanceID / square)) + sin((gl_InstanceID - (square * floor(gl_InstanceID/square)))) ;
+		p.y += 1; //sin(floor(gl_InstanceID / square)) + sin((gl_InstanceID - (square * floor(gl_InstanceID/square)))) ;
 	}
 
-	Out.CameraSpacePosition = vec3(MV * vec4(p, 1.0));
-	Out.CameraSpaceNormal = vec3(MV * vec4(n, 0.0));
+	Out.CameraSpacePosition = vec3(vec4(p, 1.0));
+	Out.CameraSpaceNormal = vec3(vec4(n, 0.0));
 	Out.InstanceId = gl_InstanceID;
 	gl_Position = MVP * vec4(p, 1.0);
 }
